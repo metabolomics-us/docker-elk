@@ -18,6 +18,14 @@ services:
       mode: replicated
       replicas: 1
 
+      update_config:
+        parallelism: 1
+        delay: 30s
+        order: stop-first
+      placement:
+        constraints:
+          - node.labels == elasticdb
+          
   logstash:
     image: docker.elastic.co/logstash/logstash-oss:6.6.1
     ports:
