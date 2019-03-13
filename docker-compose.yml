@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
 
@@ -16,17 +16,7 @@ services:
       ES_JAVA_OPTS: "-Xmx2048m -Xms2048m"
     networks:
       - elk
-    deploy:
-      mode: replicated
-      replicas: 1
-      update_config:
-        parallelism: 1
-        delay: 30s          # to be nice to binance!
-        order: stop-first
-      placement:
-        constraints:
-          - node.label == elasticdb
-          
+
   logstash:
     build:
       context: logstash/
