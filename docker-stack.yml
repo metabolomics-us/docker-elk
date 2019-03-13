@@ -23,7 +23,7 @@ services:
         delay: 30s
       placement:
         constraints:
-          - node.labels == elasticdb
+          - node.labels.elasticdb == true
           
   logstash:
     image: docker.elastic.co/logstash/logstash-oss:6.6.1
