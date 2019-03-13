@@ -21,7 +21,6 @@ services:
       update_config:
         parallelism: 1
         delay: 30s
-        order: stop-first
       placement:
         constraints:
           - node.labels == elasticdb
