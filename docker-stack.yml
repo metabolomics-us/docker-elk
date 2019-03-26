@@ -24,17 +24,22 @@ services:
       placement:
         constraints:
           - node.labels.elasticdb == true
-          
+
   logstash:
     image: docker.elastic.co/logstash/logstash-oss:6.6.1
     ports:
       - "5000:5000"
       - "9600:9600"
+      - "9601:9601/udp"
     configs:
       - source: logstash_config
         target: /usr/share/logstash/config/logstash.yml
       - source: logstash_pipeline
         target: /usr/share/logstash/pipeline/logstash.conf
+
+    volumes:
+      - ./logstash/patterns:/opt/patterns
+
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
