@@ -7,11 +7,11 @@ MTIKBSDSYSLOG  ^<%{POSINT:syslog_pri}>%{SYSLOGTIMESTAMP:syslog_timestamp} %{WORD
 
 
 # Firewall Log (No NAT):
-MIKROTIKFIREWALLNONAT %{DATA:LogPrefix} %{DATA:LogChain}: in:%{DATA:src_zone} out:%{DATA:dst_zone}, src-mac %{MAC}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, len %{INT:length}
+MIKROTIKFIREWALLNONAT %{DATA:LogPrefix}( %{DATA:LogChain})?: in:%{DATA:src_zone} out:%{DATA:dst_zone}, src-mac %{MAC}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, len %{INT:length}
 
 # Firewall Log (NAT):
-MIKROTIKFIREWALLNAT %{DATA:LogPrefix} %{DATA:LogChain}: in:%{DATA:src_zone} out:%{DATA:dst_zone}, src-mac %{MAC}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, NAT \(%{IP:nat_osrc_ip}:%{INT:nat_osrc_port}->%{IP:nat_nsrc_ip}:%{INT:nat_nsrc_port}\)->%{IP:nat_dst_ip}:%{INT:nat_dstport}, len %{INT:length}
-MIKROTIKFIREWALLNAT2 %{DATA:LogPrefix} %{DATA:LogChain}: in:%{DATA:src_zone} out:%{DATA:dst_zone}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, NAT %{IP:nat_osrc_ip}:%{INT:nat_osrc_port}->\(%{IP:nat_nsrc_ip}:%{INT:nat_nsrc_port}->%{IP:nat_dst_ip}:%{INT:nat_dstport}\), len %{INT:length}
+MIKROTIKFIREWALLNAT %{DATA:LogPrefix}( %{DATA:LogChain})?: in:%{DATA:src_zone} out:%{DATA:dst_zone}, src-mac %{MAC}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, NAT \(%{IP:nat_osrc_ip}:%{INT:nat_osrc_port}->%{IP:nat_nsrc_ip}:%{INT:nat_nsrc_port}\)->%{IP:nat_dst_ip}:%{INT:nat_dstport}, len %{INT:length}
+MIKROTIKFIREWALLNAT2 %{DATA:LogPrefix}( %{DATA:LogChain})?: in:%{DATA:src_zone} out:%{DATA:dst_zone}, proto %{DATA:proto}, %{IP:src_ip}:%{INT:src_port}->%{IP:dst_ip}:%{INT:dst_port}, NAT %{IP:nat_osrc_ip}:%{INT:nat_osrc_port}->\(%{IP:nat_nsrc_ip}:%{INT:nat_nsrc_port}->%{IP:nat_dst_ip}:%{INT:nat_dstport}\), len %{INT:length}
 
 MIKROTIKFIREWALL (?:%{MIKROTIKFIREWALLNAT}|%{MIKROTIKFIREWALLNAT2}|%{MIKROTIKFIREWALLNONAT})
 
