@@ -1,5 +1,13 @@
 version: '3.3'
 
+volumes:
+  elasticsearch-data:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      o: "addr=${NFS_HOST},nolock,soft,rw"
+      device: ":${NFS_PATH}"
+
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.1
@@ -16,14 +24,13 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-
       update_config:
         parallelism: 1
         delay: 30s
       placement:
-        constraints:
-          - node.labels.elasticdb == true
+        constraints: [node.labels.elasticdb == true]
     volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
       - /etc/localtime:/etc/localtime:ro
 
   logstash:
@@ -37,11 +44,9 @@ services:
         target: /usr/share/logstash/config/logstash.yml
       - source: logstash_pipeline
         target: /usr/share/logstash/pipeline/logstash.conf
-
     volumes:
       - ./logstash/patterns:/opt/patterns
       - /etc/localtime:/etc/localtime:ro
-
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
@@ -49,6 +54,8 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        constraints: [node.labels.gateway != true]
 
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.6.1
@@ -62,11 +69,12 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+      placement:
+        constraints: [node.labels.gateway != true]
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
 configs:
-
   elastic_config:
     file: ./elasticsearch/config/elasticsearch.yml
   logstash_config:
